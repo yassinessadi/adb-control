@@ -9,6 +9,13 @@ readme = "README.md"
 python = "^3.11"
 pytest = "^8.3.4"
 
+[tool.black]
+line-length = 88  # You can set your preferred line length
+exclude = '''
+(?x)
+(main\.py$)  # Ignore main.py file
+'''
+
 [tool.pre-commit]
 config = ".pre-commit-config.yaml"
 
