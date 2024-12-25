@@ -33,24 +33,31 @@ Below is an example of how to use the package to interact with connected Android
 ```python
 from adb_control import DeviceManager, AppManager, MediaManager
 
-# Initialize the managers
 device_manager = DeviceManager()
 app_manager = AppManager()
 media_manager = MediaManager()
 
 try:
-    # List connected devices
     devices = device_manager.list_devices()
     print("Connected Devices:", devices)
 
-    # Check if devices are connected
     if not devices:
         print("No devices connected. Please connect a device and try again.")
     else:
-        # Take a screenshot on the first connected device
-        screenshot_path = "screenshot.png"
+        screenshot_path = "jane.png"
         print(f"Taking screenshot and saving as {screenshot_path}")
         media_manager.take_screenshot(screenshot_path)
+
+        try:
+            apk_path = "facebook_lite_v438.0.0.13.102.apk"
+            remote_apk_path = "/sdcard/facebook_lite.apk"
+            print(f"Transferring APK: {apk_path} to the device...")
+            result = media_manager.transfer_file_to_device(
+                local_file_path=apk_path, remote_file_path=remote_apk_path
+            )
+            print(result)
+        except Exception as e:
+            print(f"Error during put file to device: {e}")
 
 except Exception as e:
     print(f"Error: {e}")
