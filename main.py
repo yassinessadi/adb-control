@@ -11,7 +11,7 @@ try:
     if not devices:
         print("No devices connected. Please connect a device and try again.")
     else:
-        screenshot_path = "screenshot.png"
+        screenshot_path = "jane.png"
         print(f"Taking screenshot and saving as {screenshot_path}")
         media_manager.take_screenshot(screenshot_path)
 
