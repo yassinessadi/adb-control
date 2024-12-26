@@ -1,1 +1,8 @@
-from adb_control.core import DeviceManager, AppManager, MediaManager, ConnectManager
+from adb_control.core import (
+    DeviceManager,
+    AppManager,
+    MediaManager,
+    ConnectManager,
+    InputManager,
+    KeyEvent,
+)

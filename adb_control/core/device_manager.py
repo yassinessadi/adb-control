@@ -2,6 +2,9 @@ from adb_control.core.base import ADBBase
 
 
 class DeviceManager(ADBBase):
+    def __init__(self, adb_path="adb"):
+        super().__init__(adb_path)
+
     def list_devices(self):
         """List connected devices."""
         output = self.run_command("devices")
