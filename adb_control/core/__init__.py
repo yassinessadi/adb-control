@@ -4,4 +4,4 @@ from .app_manager import AppManager
 from .media_manger import MediaManager
 from .connect_manager import ConnectManager
 from .input_manager import InputManager
-from .utils.key_event import KeyEvent
+from .utils.key_event import SystemButton, MediaButton, AlphanumericButton
