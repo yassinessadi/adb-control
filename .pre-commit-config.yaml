@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0  # Specify the version you want
+    rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: debug-statements
   - repo: https://github.com/psf/black
-    rev: 23.9.1  # Black version
+    rev: 23.9.1
     hooks:
       - id: black

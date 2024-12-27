@@ -1,4 +1,5 @@
 from adb_control.core.base import ADBBase
+import time
 
 
 class InputManager(ADBBase):
@@ -6,14 +7,18 @@ class InputManager(ADBBase):
         super().__init__(adb_path)
 
     def tap(self, x, y, device=None):
-        """Tap on the screen at the given coordinates."""
+        """
+        Tap on the screen at the given coordinates.
+        """
         command = f"shell input tap {x} {y}"
         if device:
             command = f"-s {device} {command}"
         return self.run_command(command)
 
     def swipe(self, x1, y1, x2, y2, duration=1000, device=None):
-        """Swipe from one point to another on the screen."""
+        """
+        Swipe from one point to another on the screen.
+        """
         command = f"shell input swipe {x1} {y1} {x2} {y2} {duration}"
         if device:
             command = f"-s {device} {command}"
@@ -32,3 +37,9 @@ class InputManager(ADBBase):
         if device:
             command = f"-s {device} {command}"
         return self.run_command(command)
+
+    def repeat_tap(self, x, y, times=7, delay=500, device=None):
+        for _ in range(times):
+            self.tap(x, y, device)
+            time.sleep(delay / 1000.0)
+        return True
