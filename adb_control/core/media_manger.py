@@ -14,8 +14,9 @@ class MediaManager(ADBBase):
             return f"-s {device} {command}"
         return command
 
-    def take_screenshot(self, output_path, device=None):
-        tmp_path = "/sdcard/screenshot.png"
+    def take_screenshot(
+        self, output_path, device=None, tmp_path="/sdcard/screenshot.png"
+    ):
         command = self._prepare_command(f"shell screencap -p {tmp_path}", device)
 
         try:
@@ -45,8 +46,13 @@ class MediaManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def record_video(self, output_path, duration=10, device=None):
-        tmp_path = "/sdcard/screen_record.mp4"
+    def record_video(
+        self,
+        output_path,
+        duration=10,
+        device=None,
+        tmp_path="/sdcard/screen_record.mp4",
+    ):
         command = self._prepare_command(
             f"shell screenrecord --time-limit {duration} {tmp_path}", device
         )
@@ -78,12 +84,12 @@ class MediaManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def mirror_screen(self, output_folder, device=None, interval=1):
+    def mirror_screen(
+        self, output_folder, device=None, interval=1, tmp_path="/sdcard/screenshot.png"
+    ):
         """Simulate screen mirroring by periodically capturing screenshots."""
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
-
-        tmp_path = "/sdcard/screenshot.png"
         try:
             while True:
                 # Capture the screenshot on the device
