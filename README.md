@@ -31,33 +31,47 @@ pip install .
 Below is an example of how to use the package to interact with connected Android devices:
 
 ```python
-from adb_control import DeviceManager, AppManager, MediaManager,ConnectManager,InputManager,KeyEvent
+from adb_control import (
+    DeviceManager,
+    AppManager,
+    MediaManager,
+    ConnectManager,
+    InputManager,
+    SystemButton,
+    AlphanumericButton,
+    MediaButton,
+    DeviceInfo
+)
 import time
+
 device_manager = DeviceManager()
 app_manager = AppManager()
 media_manager = MediaManager()
 connect_manager = ConnectManager()
 input_manager = InputManager()
+device_info = DeviceInfo()
 
 try:
+    connect_manager.connect("your_phone_ip_address", 5555)
     devices = device_manager.list_devices()
-    print("Connected Devices:", devices)
+    # print("Connected Devices:", devices)
 
     if not devices:
         print("No devices connected. Please connect a device and try again.")
     else:
         screenshot_path = "EC.png"
-        print(f"Taking screenshot and saving as {screenshot_path}")
-        media_manager.take_screenshot(screenshot_path)
+        # print(f"Taking screenshot and saving as {screenshot_path}")
+        # loc = media_manager.take_screenshot(screenshot_path)
         try:
-            input_manager.keyevent(keyevent=KeyEvent.KEYCODE_POWER.value)
+            input_manager.keyevent(keyevent=SystemButton.KEYCODE_POWER.value)
             time.sleep(1.5)
             input_manager.swipe(500 ,1920 ,500 ,500)
             time.sleep(1.5)
-            input_manager.text("123456")
+            input_manager.text("123123")
             time.sleep(1.5)
-            input_manager.keyevent(keyevent=KeyEvent.KEYCODE_ENTER.value)
+            input_manager.keyevent(keyevent=SystemButton.KEYCODE_ENTER.value)
 
+            print(media['message'])
         except Exception as e:
             print(f"Error during put file to device: {e}")
 

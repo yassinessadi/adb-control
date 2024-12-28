@@ -103,3 +103,29 @@ class MediaManager(ADBBase):
             return {"status": "success", "files": result}
         except Exception as e:
             return {"status": "error", "message": str(e)}
+
+    def remove_file(self, remote_file_path, folder=False, device=None):
+        """
+        Remove a specific file or folder on the Android device.
+
+        :param remote_file_path: The full path to the file or folder to remove (e.g., /sdcard/essadi.png)
+        :param folder: Whether the path is a folder (True) or a file (False)
+        :param device: The specific device ID to use for the adb command.
+        :return: A dictionary with status and message.
+        """
+        try:
+            if folder:
+                remove_command = self._prepare_command(
+                    f"shell rm -rf {remote_file_path}", device
+                )
+            else:
+                remove_command = self._prepare_command(
+                    f"shell rm {remote_file_path}", device
+                )
+            self.run_command(remove_command)
+            return {
+                "status": "success",
+                "message": f"File or folder {remote_file_path} removed.",
+            }
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
