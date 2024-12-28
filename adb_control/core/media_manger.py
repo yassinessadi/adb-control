@@ -1,7 +1,6 @@
 from adb_control.core.base import ADBBase
 import subprocess
 import time
-import cv2
 
 
 class MediaManager(ADBBase):
@@ -41,13 +40,11 @@ class MediaManager(ADBBase):
             for i in range(num_screenshots):
                 screenshot_path = f"{output_path}/screenshot_{i + 1}.png"
 
-                command = f"{self.adb_path} exec-out screencap -p > {screenshot_path}"
-                if device:
-                    command = f"{self.adb_path} -s {device} exec-out screencap -p > {screenshot_path}"
-
-                result = subprocess.run(
-                    command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                command = self._prepare_command(
+                    f"exec-out screencap -p > {screenshot_path}", device
                 )
+
+                result = self.run_command(command)
                 if result.returncode != 0:
                     raise RuntimeError(
                         f"ADB command failed: {result.stderr.decode('utf-8')}"

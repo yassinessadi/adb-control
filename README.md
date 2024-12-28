@@ -26,6 +26,47 @@ cd adb-control
 pip install .
 ```
 
+
+## Setup ADB
+To use this package, you must have ADB set up on your machine. Follow the instructions below to get started:
+
+### Install ADB:
+
+On Windows: Download the ADB platform-tools and extract them to a folder.
+On macOS/Linux: You can install ADB through your package
+### manager:
+
+```bash
+# For macOS
+brew install android-platform-tools
+
+# For Ubuntu/Linux
+sudo apt update
+sudo apt install android-tools-adb
+```
+### Enable Developer Mode on your Android device:
+Go to Settings > About phone and tap "Build number" seven times to enable Developer Options.
+Go to Settings > Developer options, then enable "USB debugging."
+Connect your device:
+
+Connect your Android device via USB cable.
+Verify the connection with the following command:
+```bash
+adb devices
+```
+
+If it's your first time connecting, you may need to authorize your computer on your Android device.
+Wireless Debugging (optional):
+
+To connect wirelessly, make sure both your computer and Android device are on the same network.
+Run the following command to connect wirelessly:
+
+```bash
+adb tcpip 5555
+adb connect <device_ip_address>:<port>
+```
+You can now use the package to interact with the device wirelessly.
+
 ## Example Usage
 
 Below is an example of how to use the package to interact with connected Android devices:
@@ -78,3 +119,10 @@ try:
 except Exception as e:
     print(f"Error: {e}")
 ```
+
+
+# Contributing
+We welcome contributions to improve this package! If you would like to contribute, please follow these steps:
+
+Fork the repository: Click the "Fork" button on GitHub to create a copy of the repository on your own account.
+We follow a simple code review process and will notify you once your changes are merged!

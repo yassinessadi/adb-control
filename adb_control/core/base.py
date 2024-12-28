@@ -7,15 +7,16 @@ class ADBBase:
 
     def run_command(self, command):
         """Run a raw ADB command."""
-        result = subprocess.run(
-            f"{self.adb_path} {command}",
-            shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        if result.returncode != 0:
-            raise Exception(f"Error: {result.stderr.decode('utf-8')}")
-        return result.stdout.decode("utf-8")
+        try:
+            result = subprocess.run(
+                f"{self.adb_path} {command}",
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            return result
+        except Exception as e:
+            raise Exception(f"Error: {e}")
 
     def start_adb_server(self):
         """Start the ADB server."""
