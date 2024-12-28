@@ -7,4 +7,5 @@ from adb_control.core import (
     MediaButton,
     SystemButton,
     AlphanumericButton,
+    DeviceInfo,
 )

@@ -9,6 +9,7 @@ class ADBBase:
         """Run a raw ADB command."""
         result = subprocess.run(
             f"{self.adb_path} {command}",
+            shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )

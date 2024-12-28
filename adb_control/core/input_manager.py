@@ -54,7 +54,7 @@ class InputManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def repeat_tap(self, x, y, times=7, delay=500, device=None):
+    def repeat_tap(self, x, y, times=7, delay=5000, device=None):
         """
         Tap repeatedly at the given coordinates.
         """
@@ -62,9 +62,9 @@ class InputManager(ADBBase):
             for _ in range(times):
                 self.tap(x, y, device)
                 time.sleep(delay / 1000.0)
-            return {
-                "status": "success",
-                "message": f"Tapped {times} times at ({x}, {y})",
-            }
+                return {
+                    "status": "success",
+                    "message": f"Tapped {times} times at ({x}, {y})",
+                }
         except Exception as e:
             return {"status": "error", "message": str(e)}
