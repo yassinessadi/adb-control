@@ -1,3 +1,17 @@
+"""
+This module provides the AppManager class, which offers utilities for managing
+applications on Android devices using ADB (Android Debug Bridge). It allows for
+installing, uninstalling, listing installed packages, and launching apps on a
+connected Android device.
+
+Functions:
+    - install_package: Installs an app package on the device.
+    - uninstall_package: Uninstalls an app package from the device.
+    - list_installed_packages: Lists all installed packages on the device.
+    - installed_package: Checks if a specific package is installed.
+    - launch_app: Launches an app using its package name.
+"""
+
 from adb_control.core.base import ADBBase
 
 
@@ -11,6 +25,8 @@ class AppManager(ADBBase):
         """
         if device:
             command = f"-s {device} {command}"
+        if package_name:
+            command = f"{command} {package_name}"
         return command
 
     def install_package(self, package_name, device=None):
@@ -73,7 +89,7 @@ class AppManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def open_app(self, package_name, device=None):
+    def launch_app(self, package_name, device=None):
         """
         Open an app using its package name.
         """
