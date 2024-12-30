@@ -5,11 +5,13 @@ class AppManager(ADBBase):
     def __init__(self, adb_path="adb"):
         super().__init__(adb_path)
 
-    def _prepare_command(self, command, package_name, device=None):
-        """Helper method to prepare the command with optional device argument."""
+    def _prepare_command(self, command, package_name=None, device=None):
+        """
+        Helper method to prepare the command with optional device and package_name arguments.
+        """
         if device:
-            return f"-s {device} {command} {package_name}"
-        return f"{command} {package_name}"
+            command = f"-s {device} {command}"
+        return command
 
     def install_package(self, package_name, device=None):
         """Install a package on the device."""
@@ -37,11 +39,53 @@ class AppManager(ADBBase):
 
     def list_installed_packages(self, device=None):
         """List all installed packages on the device."""
-        command = "shell pm list packages"
-        if device:
-            command = f"-s {device} {command}"
+        command = self._prepare_command("shell pm list packages", device=device)
         try:
             output = self.run_command(command)
-            return {"status": "success", "packages": output.splitlines()}
+            if output.returncode == 0:
+                stdout = output.stdout.decode("utf-8")
+                lines = stdout.splitlines()
+                packages = [line for line in lines]
+            return {"status": "success", "packages": packages}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def installed_package(self, device=None, package_name=None) -> dict:
+        """List all installed packages on the device.
+        package_name: str
+        function will return only the package_name
+        :return: dict
+        """
+        try:
+            output = self.list_installed_packages(device)
+            if output["status"] == "success":
+                return {
+                    "status": "success",
+                    "message": "Installed packages listed.",
+                    "packages": [
+                        package
+                        for package in output["packages"]
+                        if package == package_name
+                    ],
+                }
+            else:
+                return {"status": "error", "message": output["message"]}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
+    def open_app(self, package_name, device=None):
+        """
+        Open an app using its package name.
+        """
+        command = self._prepare_command(
+            f"shell monkey -p {package_name} -c android.intent.category.LAUNCHER 1",
+            device=device,
+        )
+        try:
+            result = self.run_command(command)
+            return {
+                "status": "success",
+                "message": f"App {package_name} opened.",
+            }
         except Exception as e:
             return {"status": "error", "message": str(e)}
