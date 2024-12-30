@@ -1,3 +1,14 @@
+"""
+A class to manage Android devices connected via ADB.
+
+This class provides functionality to list all connected devices.
+It interacts with ADB to retrieve the list of devices and their statuses.
+Inherits from ADBBase to leverage the common ADB command execution functionality.
+
+Attributes:
+    adb_path (str): Path to the ADB executable (default is "adb").
+"""
+
 from adb_control.core.base import ADBBase
 
 

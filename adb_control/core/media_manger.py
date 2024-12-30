@@ -1,6 +1,18 @@
-from adb_control.core.base import ADBBase
-import subprocess
+"""
+    A class to manage media operations on Android devices using ADB.
+
+    This class provides methods for taking screenshots, recording videos, transferring files,
+    listing media files, and removing files or folders on Android devices. It uses ADB commands
+    to interact with the device and perform these operations.
+
+    Attributes:
+        adb_path (str): The path to the ADB executable (default is "adb").
+"""
+
 import time
+from typing import Literal
+
+from adb_control.core.base import ADBBase
 
 
 class MediaManager(ADBBase):
@@ -59,16 +71,30 @@ class MediaManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def transfer_file_to_device(self, local_file_path, remote_file_path, device=None):
-        command = self._prepare_command(
-            f"push {local_file_path} {remote_file_path}", device
-        )
+    def transfer_file(
+        self,
+        local_file_path: str,
+        remote_file_path: str,
+        direction: Literal["push", "pull"],
+        device: str = None,
+    ):
+        """
+        Transfer a file between local and remote paths based on the specified direction.
+
+        Args:
+            local_file_path (str): The local file path.
+            remote_file_path (str): The remote file path.
+            direction (Literal["push", "pull"]): The direction of transfer. Must be "push" or "pull".
+            device (str, optional): The device identifier. If not provided, it uses the default device.
+
+        Returns:
+            dict: A dictionary containing the status of the operation ("success" or "error") and a message.
+        """
+        command = f"{direction} {local_file_path if direction == 'push' else remote_file_path} {remote_file_path if direction == 'push' else local_file_path}"
+        command = self._prepare_command(command, device)
         try:
             self.run_command(command)
-            return {
-                "status": "success",
-                "message": f"File {local_file_path} pushed to {remote_file_path}",
-            }
+            return {"status": "success", "message": f"File {direction}ed successfully."}
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
@@ -93,11 +119,14 @@ class MediaManager(ADBBase):
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
-    def list_media_files(self, remote_directory="/sdcard/", device=None):
+    def list_media_files(self, remote_directory="/", device=None):
         command = self._prepare_command(f"shell ls {remote_directory}", device)
         try:
             result = self.run_command(command)
-            return {"status": "success", "files": result}
+            if result.returncode == 0:
+                stdout = result.stdout.decode("utf-8")
+                lines = stdout.splitlines()
+            return {"status": "success", "files": lines}
         except Exception as e:
             return {"status": "error", "message": str(e)}
 

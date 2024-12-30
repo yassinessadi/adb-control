@@ -1,3 +1,14 @@
+"""
+A class to manage connections to Android devices over the network using ADB.
+
+This class provides methods to connect and disconnect from devices using their IP address and port.
+It builds and executes the necessary ADB commands to establish and close connections.
+Inherits from ADBBase to leverage existing ADB command functionality.
+
+Attributes:
+    adb_path (str): Path to the ADB executable (default is "adb").
+"""
+
 from adb_control.core.base import ADBBase
 
 
