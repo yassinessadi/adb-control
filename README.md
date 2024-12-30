@@ -120,6 +120,30 @@ except Exception as e:
     print(f"Error: {e}")
 ```
 
+## Example: Pull and Push Multiple Files
+
+Below is an example of how to use the package to pull and push multiple files from and to your connected Android devices:
+
+```python
+from adb_control import DeviceManager, MediaManager
+
+device_manager = DeviceManager()
+media_manager = MediaManager()
+
+try:
+    connect_manager.connect("ip_address", 5555)
+    devices = device_manager.list_devices()
+    if not devices:
+        print("No devices connected. Please connect a device and try again.")
+    else:
+        files = media_manager.list_media_files(remote_directory="/sdcard/DCIM/Screenshots")['files']
+        for file in files:
+            result = media_manager.transfer_file(local_file_path=f"images/{file}", direction='pull', remote_file_path="/sdcard/DCIM/Screenshots/"+file)
+            print(result)
+
+except Exception as e:
+    print(f"Error: {e}")
+```
 
 # Contributing
 We welcome contributions to improve this package! If you would like to contribute, please follow these steps:
