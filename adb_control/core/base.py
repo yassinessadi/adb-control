@@ -1,8 +1,10 @@
 import subprocess
 
+from adb_control.core.utils.params import ADB_PATH
+
 
 class ADBBase:
-    def __init__(self, adb_path="adb"):
+    def __init__(self, adb_path=ADB_PATH):
         self.adb_path = adb_path
 
     def run_command(self, command):

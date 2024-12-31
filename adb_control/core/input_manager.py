@@ -15,9 +15,6 @@ from adb_control.core.base import ADBBase
 
 
 class InputManager(ADBBase):
-    def __init__(self, adb_path="adb"):
-        super().__init__(adb_path)
-
     def _prepare_command(self, command, device=None):
         """
         Prepare the adb command with device-specific options.

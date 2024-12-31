@@ -16,9 +16,6 @@ from adb_control.core.base import ADBBase
 
 
 class AppManager(ADBBase):
-    def __init__(self, adb_path="adb"):
-        super().__init__(adb_path)
-
     def _prepare_command(self, command, package_name=None, device=None):
         """
         Helper method to prepare the command with optional device and package_name arguments.

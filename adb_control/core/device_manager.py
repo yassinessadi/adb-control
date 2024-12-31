@@ -10,22 +10,20 @@ Attributes:
 """
 
 from adb_control.core.base import ADBBase
+from adb_control.core.utils.params import ADB_PATH, ENCODING
 
 
 class DeviceManager(ADBBase):
-    def __init__(self, adb_path="adb"):
-        super().__init__(adb_path)
-
     def list_devices(self) -> dict:
         """List connected devices."""
         try:
             output = self.run_command("devices")
             if output.returncode == 0:
-                stdout = output.stdout.decode("utf-8")
+                stdout = output.stdout.decode(ENCODING)
                 lines = stdout.splitlines()
                 devices = [line.split("\t")[0] for line in lines if "\tdevice" in line]
                 return devices
             else:
-                return {"status": "error", "message": output.stderr.decode("utf-8")}
+                return {"status": "error", "message": output.stderr.decode(ENCODING)}
         except Exception as e:
             return {"status": "error", "message": str(e)}

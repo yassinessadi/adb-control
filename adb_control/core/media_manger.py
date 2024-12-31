@@ -13,12 +13,10 @@ import time
 from typing import Literal
 
 from adb_control.core.base import ADBBase
+from adb_control.core.utils.params import ENCODING
 
 
 class MediaManager(ADBBase):
-    def __init__(self, adb_path="adb"):
-        super().__init__(adb_path)
-
     def _prepare_command(self, command, device=None):
         """Helper method to prepend device flag if provided."""
         if device:
@@ -59,7 +57,7 @@ class MediaManager(ADBBase):
                 result = self.run_command(command)
                 if result.returncode != 0:
                     raise RuntimeError(
-                        f"ADB command failed: {result.stderr.decode('utf-8')}"
+                        f"ADB command failed: {result.stderr.decode(ENCODING)}"
                     )
 
                 print(f"Screenshot saved to {screenshot_path}")
@@ -124,7 +122,7 @@ class MediaManager(ADBBase):
         try:
             result = self.run_command(command)
             if result.returncode == 0:
-                stdout = result.stdout.decode("utf-8")
+                stdout = result.stdout.decode(ENCODING)
                 lines = stdout.splitlines()
             return {"status": "success", "files": lines}
         except Exception as e:
