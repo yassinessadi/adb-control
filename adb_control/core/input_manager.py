@@ -10,7 +10,6 @@ Attributes:
 """
 
 import time
-
 from adb_control.core.base import ADBBase
 
 
