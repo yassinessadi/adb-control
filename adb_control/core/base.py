@@ -10,13 +10,25 @@ class ADBBase:
     def run_command(self, command):
         """Run a raw ADB command."""
         try:
-            result = subprocess.run(
+            process = subprocess.run(
                 f"{self.adb_path} {command}",
                 shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            return result
+            return process
+        except Exception as e:
+            raise Exception(f"Error: {e}")
+
+    def open_command(self, command):
+        """Run a raw ADB command."""
+        try:
+            process = subprocess.Popen(
+                f"{self.adb_path} {command}",
+                shell=True,
+            )
+            print(self.adb_path, command)
+            return process
         except Exception as e:
             raise Exception(f"Error: {e}")
 

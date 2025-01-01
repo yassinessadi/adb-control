@@ -62,9 +62,11 @@ class ConnectManager(ADBBase):
             if "disconnected" in result.stdout.decode().lower():
                 return {
                     "status": "success",
-                    "message": "Disconnected from all devices"
-                    if not device_ip
-                    else f"Disconnected from {device_ip}:{port}",
+                    "message": (
+                        "Disconnected from all devices"
+                        if not device_ip
+                        else f"Disconnected from {device_ip}:{port}"
+                    ),
                 }
             else:
                 # Return the output as an error message if disconnection failed

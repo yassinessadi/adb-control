@@ -78,10 +78,9 @@ from adb_control import (
     MediaManager,
     ConnectManager,
     InputManager,
+    DeviceInfo,
     SystemButton,
-    AlphanumericButton,
-    MediaButton,
-    DeviceInfo
+    AndroidScreenMirroring
 )
 import time
 
@@ -91,31 +90,26 @@ media_manager = MediaManager()
 connect_manager = ConnectManager()
 input_manager = InputManager()
 device_info = DeviceInfo()
-
+stream_manager = AndroidScreenMirroring(
+    width=420,
+    height=960,
+    screen_title="jane Screen"
+)
 try:
-    connect_manager.connect("your_phone_ip_address", 5555)
+    result = connect_manager.connect("your_ip_address", 5555)
     devices = device_manager.list_devices()
-    # print("Connected Devices:", devices)
-
     if not devices:
         print("No devices connected. Please connect a device and try again.")
     else:
-        screenshot_path = "EC.png"
-        # print(f"Taking screenshot and saving as {screenshot_path}")
-        # loc = media_manager.take_screenshot(screenshot_path)
-        try:
-            input_manager.keyevent(keyevent=SystemButton.KEYCODE_POWER.value)
-            time.sleep(1.5)
-            input_manager.swipe(500 ,1920 ,500 ,500)
-            time.sleep(1.5)
-            input_manager.text("123123")
-            time.sleep(1.5)
-            input_manager.keyevent(keyevent=SystemButton.KEYCODE_ENTER.value)
-
-            print(media['message'])
-        except Exception as e:
-            print(f"Error during put file to device: {e}")
-
+        input_manager.keyevent(keyevent=SystemButton.KEYCODE_POWER.value)
+        time.sleep(1.5)
+        input_manager.swipe(500 ,1920 ,500 ,500)
+        time.sleep(1.5)
+        input_manager.text("123123")
+        time.sleep(1.5)
+        input_manager.keyevent(keyevent=SystemButton.KEYCODE_ENTER.value)
+        time.sleep(2)
+        stream_manager.start_mirroring()
 except Exception as e:
     print(f"Error: {e}")
 ```
