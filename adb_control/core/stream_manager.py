@@ -7,7 +7,8 @@ class AndroidScreenMirroring(ADBBase):
         self,
         width=420,
         height=960,
-        bit_rate=500000,
+        bit_rate=1000000,
+        buffer_size=1024,
         screen_title="Android Screen",
         *args,
         **kwargs,
@@ -17,6 +18,7 @@ class AndroidScreenMirroring(ADBBase):
         self.adb_path = ADB_PATH
         self.height = height
         self.bit_rate = bit_rate
+        self.buffer_size = buffer_size
         self.screen_title = screen_title
 
     def start_mirroring(self):
@@ -44,11 +46,14 @@ class AndroidScreenMirroring(ADBBase):
 
     def _build_ffmpeg_command(self):
         """Constructs the FFmpeg command for displaying the screen."""
-        return f'ffmpeg -i - -f sdl "{self.screen_title}"'
+        return (
+            f"ffmpeg -loglevel debug -i - "
+            f"-buffer_size {self.buffer_size} "
+            f'-f sdl "{self.screen_title}"'
+        )
 
     def _execute_command(self, command):
         """Executes the given shell command."""
-        # print(f"Starting mirroring with command:\n{command}")
         process = self.open_command(command)
         process.wait()
 
@@ -60,3 +65,8 @@ class AndroidScreenMirroring(ADBBase):
     def update_bit_rate(self, bit_rate):
         self.bit_rate = bit_rate
         print(f"Bit rate updated to {self.bit_rate}.")
+
+    def update_buffer_size(self, buffer_size):
+        """Updates the buffer size."""
+        self.buffer_size = buffer_size
+        print(f"Buffer size updated to {self.buffer_size}.")

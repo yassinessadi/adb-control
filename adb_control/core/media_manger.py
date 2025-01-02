@@ -10,7 +10,6 @@
 """
 
 import time
-from typing import Literal
 
 from adb_control.core.base import ADBBase
 from adb_control.core.utils.params import ENCODING
@@ -66,33 +65,6 @@ class MediaManager(ADBBase):
                 "status": "success",
                 "message": f"{num_screenshots} screenshots saved to {output_path}",
             }
-        except Exception as e:
-            return {"status": "error", "message": str(e)}
-
-    def transfer_file(
-        self,
-        local_file_path: str,
-        remote_file_path: str,
-        direction: Literal["push", "pull"],
-        device: str = None,
-    ):
-        """
-        Transfer a file between local and remote paths based on the specified direction.
-
-        Args:
-            local_file_path (str): The local file path.
-            remote_file_path (str): The remote file path.
-            direction (Literal["push", "pull"]): The direction of transfer. Must be "push" or "pull".
-            device (str, optional): The device identifier. If not provided, it uses the default device.
-
-        Returns:
-            dict: A dictionary containing the status of the operation ("success" or "error") and a message.
-        """
-        command = f"{direction} {local_file_path if direction == 'push' else remote_file_path} {remote_file_path if direction == 'push' else local_file_path}"
-        command = self._prepare_command(command, device)
-        try:
-            self.run_command(command)
-            return {"status": "success", "message": f"File {direction}ed successfully."}
         except Exception as e:
             return {"status": "error", "message": str(e)}
 
