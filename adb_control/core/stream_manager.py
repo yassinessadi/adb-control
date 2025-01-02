@@ -23,14 +23,9 @@ class AndroidScreenMirroring(ADBBase):
 
     def start_mirroring(self):
         try:
-            # Build ADB and FFmpeg commands
             adb_command = self._build_adb_command()
             ffmpeg_command = self._build_ffmpeg_command()
-
-            # Combine commands
             full_command = f"{adb_command} | {ffmpeg_command}"
-
-            # Start the mirroring process
             self._execute_command(full_command)
         except KeyboardInterrupt:
             print("\nMirroring stopped by user.")

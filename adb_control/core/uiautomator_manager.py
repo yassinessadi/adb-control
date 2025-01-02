@@ -3,27 +3,25 @@ from adb_control.core.base import ADBBase
 
 
 class UIExtractor(ADBBase):
-    def __init__(
-        self, adb_path="adb", attributes=["resource-id", "text", "class", "package"]
-    ):
-        super().__init__(adb_path)
-        self.attributes = attributes
-
     def uiautomator(self) -> dict:
         """
         Extract and process UI data from the device in real-time.
         """
         try:
+            # Step 1: Dump the UI hierarchy to a file on the device
             dump_path = "/sdcard/window_dump.xml"
             self.shell_command(f"uiautomator dump {dump_path}")
 
+            # Step 2: Pull the file from the device to the local system
             local_file = "window_dump.xml"
             self.transfer_file(
                 direction="pull", remote_file_path=dump_path, local_file_path=local_file
             )
 
+            # Step 3: Remove the dumped file from the device
             self.remove_file(dump_path)
 
+            # Step 4: Parse the XML file to extract UI information
             ui_data = self._parse_ui_hierarchy(local_file)
 
             return {
@@ -48,10 +46,19 @@ class UIExtractor(ADBBase):
             tree = ET.parse(file_path)
             root = tree.getroot()
 
+            # Extract UI data
             ui_elements = []
             for node in root.iter("node"):
-                element = {attr: node.attrib.get(attr, "") for attr in self.attributes}
+                element = {
+                    "text": node.attrib.get("text", ""),
+                    "resource_id": node.attrib.get("resource-id", ""),
+                    "package": node.attrib.get("package", ""),
+                    "class": node.attrib.get("class", ""),
+                    "content_desc": node.attrib.get("content-desc", ""),
+                    "bounds": node.attrib.get("bounds", ""),
+                }
                 ui_elements.append(element)
+
             return {"elements": ui_elements}
 
         except Exception as e:
@@ -65,10 +72,12 @@ class UIExtractor(ADBBase):
         :return: The matched element or an error message.
         """
         try:
+            # Step 1: Extract UI data
             ui_data = self.uiautomator()
             if ui_data["status"] == "error":
                 return ui_data
 
+            # Step 2: Find the element by ID
             element = self._get_element_by_id(ui_data["data"]["elements"], element_id)
             if element["element"] == "not found":
                 return {
