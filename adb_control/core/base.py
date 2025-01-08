@@ -20,12 +20,13 @@ class ADBBase:
         except Exception as e:
             raise Exception(f"Error: {e}")
 
-    def open_command(self, command) -> subprocess.CompletedProcess:
+    def open_command(self, command):
         """Run a raw ADB command."""
         try:
             process = subprocess.Popen(
                 f"{self.adb_path} {command}",
                 shell=True,
+                stdout=subprocess.PIPE,
             )
             print(self.adb_path, command)
             return process
